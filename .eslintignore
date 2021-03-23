@@ -1,2 +1,8 @@
 *.css
 *.svg
+
+node_modules
+
+apollo.config.js
+
+src/graphql/__generated__
