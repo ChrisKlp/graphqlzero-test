@@ -1,9 +1,9 @@
 // type UserProps = {};
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { PostListItem } from '../components';
+import { Navigation, PostListItem } from '../components';
 import { USER_POSTS } from '../graphql/queries';
-import { UserPostsQuery, UserPostsVariables } from '../graphql/types/userPosts';
+import { UserPostsQuery, UserPostsVariables } from '../graphql/types/UserPosts';
 
 const User: React.FC = () => {
   const { id }: { id: string } = useParams();
@@ -27,8 +27,7 @@ const User: React.FC = () => {
 
   return (
     <div>
-      <h1>{data?.user.name}</h1>
-      <hr />
+      <Navigation name={data?.user.name} />
       {data?.user.posts.data.map((post) => (
         <PostListItem key={post.id} data={post} />
       ))}

@@ -4,6 +4,7 @@ import { Container } from 'react-bootstrap';
 import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
 import createApolloClient from '../graphql/createApolloClient';
 import Home from './Home';
+import Post from './Post';
 import User from './User';
 
 const Root: React.FC = () => {
@@ -16,6 +17,7 @@ const Root: React.FC = () => {
           <Switch>
             <Route exact path="/" component={Home} />
             <Route path="/user/:id" component={User} />
+            <Route path="/post/:id" component={Post} />
           </Switch>
         </Container>
       </Router>

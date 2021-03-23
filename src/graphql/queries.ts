@@ -33,3 +33,24 @@ export const USER_POSTS = gql`
     }
   }
 `;
+
+export const POST = gql`
+  query post($id: ID!) {
+    post(id: $id) {
+      id
+      title
+      body
+      user {
+        name
+      }
+      comments {
+        data {
+          id
+          name
+          email
+          body
+        }
+      }
+    }
+  }
+`;
