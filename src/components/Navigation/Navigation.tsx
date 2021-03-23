@@ -6,9 +6,10 @@ import { useHistory } from 'react-router-dom';
 // eslint-disable-next-line @typescript-eslint/ban-types
 type NavigationProps = {
   name: string | undefined;
+  showModal?: () => void;
 };
 
-const Navigation: React.FC<NavigationProps> = ({ name }) => {
+const Navigation: React.FC<NavigationProps> = ({ name, showModal }) => {
   const history = useHistory();
   const isUserPage = /\/user\/.*/;
 
@@ -21,7 +22,7 @@ const Navigation: React.FC<NavigationProps> = ({ name }) => {
         <h4>{name}</h4>
         <div style={{ minWidth: '40px' }}>
           {isUserPage.test(history.location.pathname) && (
-            <Button variant="success">
+            <Button variant="warning" onClick={showModal}>
               <FontAwesomeIcon icon={faPlus} />
             </Button>
           )}

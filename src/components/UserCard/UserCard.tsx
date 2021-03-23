@@ -26,7 +26,12 @@ const UserCard: React.FC<UserCardProps> = ({ data, className }) => {
           <span>{data?.company?.catchPhrase}</span>
           <strong>{data?.company?.bs}</strong>
         </Card.Text>
-        <Button className="w-100" as={Link} to={`/user/${data.id}`}>
+        <Button
+          className="w-100 text-uppercase"
+          variant="warning"
+          as={Link}
+          to={`/user/${data.id}`}
+        >
           Details
         </Button>
       </Card.Body>

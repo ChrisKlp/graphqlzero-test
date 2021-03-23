@@ -4,9 +4,10 @@ import { PostCommentsData } from '../../graphql/types/Post';
 
 type CommentsProps = {
   data: PostCommentsData;
+  showModal?: () => void;
 };
 
-const Comments: React.FC<CommentsProps> = ({ data }) => {
+const Comments: React.FC<CommentsProps> = ({ data, showModal }) => {
   const [isVisible, setIsVisible] = useState<boolean>(false);
 
   return (
@@ -15,7 +16,9 @@ const Comments: React.FC<CommentsProps> = ({ data }) => {
         <Button variant="link" onClick={() => setIsVisible((prev) => !prev)}>
           Show Comments
         </Button>
-        <Button variant="link">Add Comment</Button>
+        <Button variant="link" onClick={showModal}>
+          Add Comment
+        </Button>
       </div>
       {isVisible && (
         <div className="my-4">
