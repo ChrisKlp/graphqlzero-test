@@ -37,7 +37,7 @@ const useCreatePost = (
           },
         });
 
-        if (userPostsCache !== null) {
+        if (userPostsCache && userPostsCache.user?.posts?.data) {
           cache.writeQuery({
             query: USER_POSTS,
             variables: {
@@ -49,7 +49,7 @@ const useCreatePost = (
                 posts: {
                   ...userPostsCache.user?.posts,
                   data: [
-                    ...userPostsCache.user?.posts?.data!,
+                    ...userPostsCache.user?.posts?.data,
                     addPostData?.createPost,
                   ],
                 },

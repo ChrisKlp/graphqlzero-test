@@ -7,17 +7,16 @@ import { users } from '../graphql/__generated__/users';
 const Home: React.FC = () => {
   const { data, loading, error } = useQuery<users>(USERS);
 
-  const loadingUsers = [];
-
-  for (let i = 0; i < 12; i += 1) {
-    loadingUsers.push(
-      <Col sm={6} md={4} lg={3} className="mb-4" key={i}>
-        <UserCardSkeleton />
-      </Col>
-    );
-  }
-
   if (loading) {
+    const loadingUsers = [];
+
+    for (let i = 0; i < 12; i += 1) {
+      loadingUsers.push(
+        <Col sm={6} md={4} lg={3} className="mb-4" key={i}>
+          <UserCardSkeleton />
+        </Col>
+      );
+    }
     return <Row>{loadingUsers}</Row>;
   }
 
@@ -25,10 +24,10 @@ const Home: React.FC = () => {
 
   return (
     <Row>
-      {data?.users?.data != null &&
+      {data?.users?.data &&
         data?.users?.data.map((user) => (
           <Col sm={6} md={4} lg={3} className="mb-4" key={user?.id}>
-            <UserCard data={user} className="h-100" />
+            {user && <UserCard data={user} className="h-100" />}
           </Col>
         ))}
     </Row>

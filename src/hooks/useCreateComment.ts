@@ -36,7 +36,7 @@ const useCreateComment = (
           },
         });
 
-        if (postCache !== null) {
+        if (postCache && postCache.post?.comments?.data) {
           cache.writeQuery({
             query: POST,
             variables: {
@@ -48,7 +48,7 @@ const useCreateComment = (
                 comments: {
                   ...postCache.post?.comments,
                   data: [
-                    ...postCache.post?.comments?.data!,
+                    ...postCache.post?.comments?.data,
                     addCommentData?.createComment,
                   ],
                 },

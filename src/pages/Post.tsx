@@ -31,11 +31,11 @@ const Post: React.FC = () => {
         <PostComponentSkeleton />
       ) : (
         <>
-          <PostComponent data={data?.post} />
+          {data?.post && <PostComponent data={data.post} />}
           <hr />
-          {data?.post?.comments?.data != null && (
+          {data?.post?.comments?.data && (
             <Comments
-              data={data?.post.comments.data}
+              data={data.post.comments.data}
               showModal={handleModal.showModal}
             />
           )}

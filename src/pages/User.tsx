@@ -47,10 +47,10 @@ const User: React.FC = () => {
       <ListGroup>
         {loading
           ? loadingPosts
-          : data?.user?.posts?.data != null &&
+          : data?.user?.posts?.data &&
             data?.user?.posts?.data.map(
               (post) =>
-                post != null && (
+                post && (
                   <PostListItem
                     key={post.id}
                     data={post}

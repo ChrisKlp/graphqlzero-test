@@ -47,9 +47,7 @@
     "react/prop-types": "off",
     "react/jsx-uses-react": "off",
     "react/react-in-jsx-scope": "off",
-    "no-non-null-assertion": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-non-null-asserted-optional-chain": "off"
+    "no-non-null-assertion": "off"
   },
   "settings": {
     "import/resolver": {
