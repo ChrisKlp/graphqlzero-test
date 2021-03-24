@@ -1,9 +1,9 @@
 import { useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { PostCommentsData } from '../../graphql/types/Post';
+import { post_post_comments } from '../../graphql/__generated__/post';
 
 type CommentsProps = {
-  data: PostCommentsData;
+  data: post_post_comments | null;
   showModal?: () => void;
 };
 
@@ -20,16 +20,16 @@ const Comments: React.FC<CommentsProps> = ({ data, showModal }) => {
           Add Comment
         </Button>
       </div>
-      {isVisible && (
+      {isVisible && data?.data != null && (
         <div className="my-4">
           {data.data.map((comment) => (
-            <Card key={comment.id} className="mb-3">
+            <Card key={comment?.id} className="mb-3">
               <Card.Body>
                 <div className="d-flex justify-content-between align-items-center mb-3">
-                  <strong>{comment.name}</strong>
-                  <a href={`mailto:${comment.email}`}>{comment.email}</a>
+                  <strong>{comment?.name}</strong>
+                  <a href={`mailto:${comment?.email}`}>{comment?.email}</a>
                 </div>
-                <p>{comment.body}</p>
+                <p>{comment?.body}</p>
               </Card.Body>
             </Card>
           ))}

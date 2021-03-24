@@ -1,7 +1,7 @@
-import { PostData } from '../../graphql/types/Post';
+import { post_post } from '../../graphql/__generated__/post';
 
 type PostProps = {
-  data: PostData;
+  data: post_post;
 };
 
 const Post: React.FC<PostProps> = ({ data }) => {

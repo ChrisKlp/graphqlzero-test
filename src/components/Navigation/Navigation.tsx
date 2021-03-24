@@ -5,7 +5,7 @@ import { useHistory } from 'react-router-dom';
 
 // eslint-disable-next-line @typescript-eslint/ban-types
 type NavigationProps = {
-  name: string | undefined;
+  name?: string | null;
   showModal?: () => void;
 };
 

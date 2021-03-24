@@ -2,14 +2,16 @@ import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
 import { Comments, ModalForm, Navigation, PostComponent } from '../components';
 import { POST } from '../graphql/queries';
-import { PostQuery, PostVariables } from '../graphql/types/Post';
+import { post, postVariables } from '../graphql/__generated__/post';
+import useCreateComment from '../hooks/useCreateComment';
 import useModal from '../hooks/useModal';
 
 const Post: React.FC = () => {
   const { id }: { id: string } = useParams();
   const handleModal = useModal();
+  const handleCreateComment = useCreateComment(id);
 
-  const { data, loading, error } = useQuery<PostQuery, PostVariables>(POST, {
+  const { data, loading, error } = useQuery<post, postVariables>(POST, {
     variables: {
       id,
     },
@@ -25,18 +27,22 @@ const Post: React.FC = () => {
 
   return (
     <>
-      <Navigation name={data?.post.user.name} />
-      {data && (
+      {data?.post != null && data.post.user != null && (
         <>
+          <Navigation name={data?.post.user.name} />
           <PostComponent data={data?.post} />
           <hr />
           <Comments
             data={data?.post.comments}
             showModal={handleModal.showModal}
           />
+          <ModalForm
+            handleModal={handleModal}
+            comments
+            createComment={handleCreateComment}
+          />
         </>
       )}
-      <ModalForm handleModal={handleModal} comments />
     </>
   );
 };

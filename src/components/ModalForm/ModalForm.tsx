@@ -1,10 +1,14 @@
 import { Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
+import { yupResolver } from '@hookform/resolvers/yup';
+import * as Yup from 'yup';
 import { UseModalType } from '../../hooks/useModal';
 
 type ModalFormProps = {
   handleModal: UseModalType;
   comments?: boolean;
+  createPost?: (title: string, body: string) => void;
+  createComment?: (name: string, email: string, body: string) => void;
 };
 
 type Inputs = {
@@ -14,9 +18,58 @@ type Inputs = {
   body: string;
 };
 
-const ModalForm: React.FC<ModalFormProps> = ({ handleModal, comments }) => {
-  const { register, handleSubmit, errors } = useForm<Inputs>();
-  const onSubmit = (data: Inputs) => console.log(data);
+const ModalForm: React.FC<ModalFormProps> = ({
+  handleModal,
+  comments,
+  createPost,
+  createComment,
+}) => {
+  const validationSchema = Yup.object().shape(
+    comments
+      ? {
+          name: Yup.string()
+            .required('Field is required')
+            .min(3, 'Use at least 3 characters')
+            .max(30, 'Use maximum 30 characters'),
+          email: Yup.string()
+            .required('Field is required')
+            .email('Please use a valid email address'),
+          body: Yup.string()
+            .required('Field is required')
+            .min(10, 'Use at least 10 characters'),
+        }
+      : {
+          title: Yup.string()
+            .required('Field is required')
+            .min(10, 'Use at least 10 characters')
+            .max(150, 'Use maximum 150 characters'),
+          body: Yup.string()
+            .required('Field is required')
+            .min(10, 'Use at least 10 characters'),
+        }
+  );
+
+  const { register, handleSubmit, errors, reset } = useForm<Inputs>({
+    resolver: yupResolver(validationSchema),
+  });
+
+  const onCancel = () => {
+    handleModal.closeModal();
+    reset();
+  };
+
+  const onSubmit = (data: Inputs) => {
+    if (!comments && createPost) {
+      createPost(data.title, data.body);
+    }
+
+    if (comments && createComment) {
+      createComment(data.name, data.email, data.body);
+    }
+
+    handleModal.closeModal();
+    onCancel();
+  };
 
   return (
     <Modal
@@ -38,17 +91,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ handleModal, comments }) => {
                   type="text"
                   name="name"
                   isInvalid={!!errors?.name}
-                  ref={register({
-                    required: { value: true, message: 'Field is required' },
-                    maxLength: {
-                      value: 30,
-                      message: 'use maximum 30 characters',
-                    },
-                    minLength: {
-                      value: 3,
-                      message: 'use at least 3 characters',
-                    },
-                  })}
+                  ref={register}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.name?.message}
@@ -60,13 +103,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ handleModal, comments }) => {
                   type="email"
                   name="email"
                   isInvalid={!!errors?.email}
-                  ref={register({
-                    required: { value: true, message: 'Field is required' },
-                    pattern: {
-                      value: /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/,
-                      message: 'Input valid email',
-                    },
-                  })}
+                  ref={register}
                 />
                 <Form.Control.Feedback type="invalid">
                   {errors.email?.message}
@@ -80,17 +117,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ handleModal, comments }) => {
                 type="text"
                 name="title"
                 isInvalid={!!errors?.title}
-                ref={register({
-                  required: { value: true, message: 'Field is required' },
-                  maxLength: {
-                    value: 150,
-                    message: 'use maximum 150 characters',
-                  },
-                  minLength: {
-                    value: 10,
-                    message: 'use at least 10 characters',
-                  },
-                })}
+                ref={register}
               />
               <Form.Control.Feedback type="invalid">
                 {errors.title?.message}
@@ -104,13 +131,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ handleModal, comments }) => {
               rows={comments ? 3 : 8}
               name="body"
               isInvalid={!!errors?.body}
-              ref={register({
-                required: { value: true, message: 'Field is required' },
-                minLength: {
-                  value: 10,
-                  message: 'use at least 10 characters',
-                },
-              })}
+              ref={register}
             />
             <Form.Control.Feedback type="invalid">
               {errors.body?.message}
@@ -118,7 +139,7 @@ const ModalForm: React.FC<ModalFormProps> = ({ handleModal, comments }) => {
           </Form.Group>
         </Modal.Body>
         <Modal.Footer>
-          <Button variant="secondary" onClick={handleModal.closeModal}>
+          <Button variant="secondary" onClick={onCancel}>
             Close
           </Button>
           <Button variant="warning" type="submit">
