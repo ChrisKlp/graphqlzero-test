@@ -1,7 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { ListGroup } from 'react-bootstrap';
 import { useParams } from 'react-router-dom';
-import { ModalForm, Navigation, PostListItem } from '../components';
+import {
+  Error,
+  ModalForm,
+  Navigation,
+  PostListItem,
+  PostListItemSkeleton,
+} from '../components';
 import { USER_POSTS } from '../graphql/queries';
 
 import {
@@ -27,30 +33,31 @@ const User: React.FC = () => {
     }
   );
 
-  if (loading) {
-    return <p>...loading</p>;
+  const loadingPosts = [];
+
+  for (let i = 0; i < 12; i += 1) {
+    loadingPosts.push(<PostListItemSkeleton key={i} />);
   }
 
-  if (error) {
-    return <p>Opps... {error.message}</p>;
-  }
+  if (error) return <Error error={error} />;
 
   return (
     <>
       <Navigation name={data?.user?.name} showModal={handleModal.showModal} />
       <ListGroup>
-        {data?.user?.posts?.data != null &&
-          data?.user?.posts?.data.map((post) => (
-            <>
-              {post != null && (
-                <PostListItem
-                  key={post!.id}
-                  data={post}
-                  deletePost={handleDeletePost}
-                />
-              )}
-            </>
-          ))}
+        {loading
+          ? loadingPosts
+          : data?.user?.posts?.data != null &&
+            data?.user?.posts?.data.map(
+              (post) =>
+                post != null && (
+                  <PostListItem
+                    key={post.id}
+                    data={post}
+                    deletePost={handleDeletePost}
+                  />
+                )
+            )}
       </ListGroup>
       <ModalForm handleModal={handleModal} createPost={handleCreatePost} />
     </>

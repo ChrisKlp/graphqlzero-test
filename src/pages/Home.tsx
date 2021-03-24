@@ -1,22 +1,30 @@
 import { useQuery } from '@apollo/client';
 import { Col, Row } from 'react-bootstrap';
-import { UserCard } from '../components';
+import { Error, UserCard, UserCardSkeleton } from '../components';
 import { USERS } from '../graphql/queries';
 import { users } from '../graphql/__generated__/users';
 
 const Home: React.FC = () => {
   const { data, loading, error } = useQuery<users>(USERS);
 
-  if (loading) {
-    return <p>...loading</p>;
+  const loadingUsers = [];
+
+  for (let i = 0; i < 12; i += 1) {
+    loadingUsers.push(
+      <Col sm={6} md={4} lg={3} className="mb-4" key={i}>
+        <UserCardSkeleton />
+      </Col>
+    );
   }
 
-  if (error) {
-    return <p>Opps... {error.message}</p>;
+  if (loading) {
+    return <Row>{loadingUsers}</Row>;
   }
+
+  if (error) return <Error error={error} />;
 
   return (
-    <Row className="g-0">
+    <Row>
       {data?.users?.data != null &&
         data?.users?.data.map((user) => (
           <Col sm={6} md={4} lg={3} className="mb-4" key={user?.id}>

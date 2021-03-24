@@ -1,6 +1,13 @@
 import { useQuery } from '@apollo/client';
 import { useParams } from 'react-router-dom';
-import { Comments, ModalForm, Navigation, PostComponent } from '../components';
+import {
+  Comments,
+  Error,
+  ModalForm,
+  Navigation,
+  PostComponent,
+  PostComponentSkeleton,
+} from '../components';
 import { POST } from '../graphql/queries';
 import { post, postVariables } from '../graphql/__generated__/post';
 import useCreateComment from '../hooks/useCreateComment';
@@ -12,37 +19,33 @@ const Post: React.FC = () => {
   const handleCreateComment = useCreateComment(id);
 
   const { data, loading, error } = useQuery<post, postVariables>(POST, {
-    variables: {
-      id,
-    },
+    variables: { id },
   });
 
-  if (loading) {
-    return <p>...loading</p>;
-  }
-
-  if (error) {
-    return <p>Opps... {error.message}</p>;
-  }
+  if (error) return <Error error={error} />;
 
   return (
     <>
-      {data?.post != null && data.post.user != null && (
+      <Navigation name={data?.post?.user?.name} />
+      {loading ? (
+        <PostComponentSkeleton />
+      ) : (
         <>
-          <Navigation name={data?.post.user.name} />
           <PostComponent data={data?.post} />
           <hr />
-          <Comments
-            data={data?.post.comments}
-            showModal={handleModal.showModal}
-          />
-          <ModalForm
-            handleModal={handleModal}
-            comments
-            createComment={handleCreateComment}
-          />
+          {data?.post?.comments?.data != null && (
+            <Comments
+              data={data?.post.comments.data}
+              showModal={handleModal.showModal}
+            />
+          )}
         </>
       )}
+      <ModalForm
+        handleModal={handleModal}
+        comments
+        createComment={handleCreateComment}
+      />
     </>
   );
 };

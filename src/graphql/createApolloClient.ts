@@ -8,16 +8,15 @@ import {
 import { onError } from '@apollo/client/link/error';
 
 const createApolloClient = (): ApolloClient<NormalizedCacheObject> => {
-  const httpLink = new HttpLink({ uri: 'https://graphqlzero.almansi.me/api' });
+  const httpLink = new HttpLink({ uri: process.env.REACT_APP_GRAPHQL_URL });
 
   const errorLink = onError(({ graphQLErrors, networkError }) => {
-    if (graphQLErrors) {
-      graphQLErrors.map(({ message }) =>
-        console.log(`Graphql Error ${message}`)
+    if (graphQLErrors)
+      graphQLErrors.forEach(({ message }) =>
+        Error(`[GraphQL error]: Message: ${message}`)
       );
-    }
     if (networkError?.message) {
-      console.log(`Network Error ${networkError.message}`);
+      Error(`Network Error: ${networkError.message}`);
     }
   });
 
