@@ -17,7 +17,9 @@ const Post: React.FC = () => {
   const handleModal = useModal();
   const handleCreateComment = useCreateComment(id);
 
-  const { data, loading, error } = useQuery<post, postVariables>(POST);
+  const { data, loading, error } = useQuery<post, postVariables>(POST, {
+    variables: { id },
+  });
 
   if (error)
     return <Redirect to={{ pathname: '/network-error', state: { error } }} />;

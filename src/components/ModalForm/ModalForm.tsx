@@ -49,7 +49,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
         }
   );
 
-  const { register, handleSubmit, errors, reset } = useForm<Inputs>({
+  const { register, handleSubmit, errors, reset } = useForm({
     resolver: yupResolver(validationSchema),
   });
 
@@ -85,7 +85,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
         <Modal.Body className="m-4">
           {comments ? (
             <>
-              <Form.Group>
+              <Form.Group controlId="name">
                 <Form.Label>Name:</Form.Label>
                 <Form.Control
                   type="text"
@@ -97,7 +97,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
                   {errors.name?.message}
                 </Form.Control.Feedback>
               </Form.Group>
-              <Form.Group>
+              <Form.Group controlId="email">
                 <Form.Label>Email:</Form.Label>
                 <Form.Control
                   type="email"
@@ -111,7 +111,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               </Form.Group>
             </>
           ) : (
-            <Form.Group>
+            <Form.Group controlId="title">
               <Form.Label>Title:</Form.Label>
               <Form.Control
                 type="text"
@@ -124,7 +124,7 @@ const ModalForm: React.FC<ModalFormProps> = ({
               </Form.Control.Feedback>
             </Form.Group>
           )}
-          <Form.Group>
+          <Form.Group controlId="body">
             <Form.Label>Body:</Form.Label>
             <Form.Control
               as="textarea"

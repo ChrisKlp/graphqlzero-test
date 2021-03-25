@@ -4,14 +4,13 @@ import { users_users_data } from '../../graphql/__generated__/users';
 
 type UserCardProps = {
   data: users_users_data;
-  className?: string;
 };
 
-const UserCard: React.FC<UserCardProps> = ({ data, className }) => {
+const UserCard: React.FC<UserCardProps> = ({ data }) => {
   const { id, name, email, phone, website, company } = data;
 
   return (
-    <Card className={className}>
+    <Card className="h-100">
       <Card.Header>
         <h5 className="mb-1" style={{ letterSpacing: '-0.5px' }}>
           {name}

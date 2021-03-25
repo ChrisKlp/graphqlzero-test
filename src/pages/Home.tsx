@@ -29,7 +29,7 @@ const Home: React.FC = () => {
       {data?.users?.data &&
         data?.users?.data.map((user) => (
           <Col sm={6} md={4} lg={3} className="mb-4" key={user?.id}>
-            {user && <UserCard data={user} className="h-100" />}
+            {user && <UserCard data={user} />}
           </Col>
         ))}
     </Row>

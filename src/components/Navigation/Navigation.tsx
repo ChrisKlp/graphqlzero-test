@@ -32,7 +32,7 @@ const Navigation: React.FC<NavigationProps> = ({ name, showModal }) => {
         )}
         <div style={{ minWidth: '40px' }}>
           {isUserPage.test(history.location.pathname) && (
-            <Button variant="warning" onClick={showModal}>
+            <Button variant="warning" onClick={showModal} data-testid="add">
               <FontAwesomeIcon icon={faPlus} />
             </Button>
           )}
