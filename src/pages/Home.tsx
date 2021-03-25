@@ -1,6 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { Col, Row } from 'react-bootstrap';
-import { Error, UserCard, UserCardSkeleton } from '../components';
+import { Redirect } from 'react-router-dom';
+import { UserCard, UserCardSkeleton } from '../components';
 import { USERS } from '../graphql/queries';
 import { users } from '../graphql/__generated__/users';
 
@@ -20,7 +21,8 @@ const Home: React.FC = () => {
     return <Row>{loadingUsers}</Row>;
   }
 
-  if (error) return <Error error={error} />;
+  if (error)
+    return <Redirect to={{ pathname: '/network-error', state: { error } }} />;
 
   return (
     <Row>

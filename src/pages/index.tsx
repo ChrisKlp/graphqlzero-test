@@ -6,6 +6,7 @@ import createApolloClient from '../graphql/createApolloClient';
 import Home from './Home';
 import Post from './Post';
 import User from './User';
+import NetworkError from './NetworkError';
 
 const Root: React.FC = () => {
   const client = createApolloClient();
@@ -18,6 +19,7 @@ const Root: React.FC = () => {
             <Route exact path="/" component={Home} />
             <Route path="/user/:id" component={User} />
             <Route path="/post/:id" component={Post} />
+            <Route exact path="/network-error" component={NetworkError} />
           </Switch>
         </Container>
       </Router>

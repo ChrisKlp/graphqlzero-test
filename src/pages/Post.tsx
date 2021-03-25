@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import {
   Comments,
-  Error,
   ModalForm,
   Navigation,
   PostComponent,
@@ -18,11 +17,10 @@ const Post: React.FC = () => {
   const handleModal = useModal();
   const handleCreateComment = useCreateComment(id);
 
-  const { data, loading, error } = useQuery<post, postVariables>(POST, {
-    variables: { id },
-  });
+  const { data, loading, error } = useQuery<post, postVariables>(POST);
 
-  if (error) return <Error error={error} />;
+  if (error)
+    return <Redirect to={{ pathname: '/network-error', state: { error } }} />;
 
   return (
     <>

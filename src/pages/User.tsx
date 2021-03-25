@@ -1,8 +1,7 @@
 import { useQuery } from '@apollo/client';
 import { ListGroup } from 'react-bootstrap';
-import { useParams } from 'react-router-dom';
+import { Redirect, useParams } from 'react-router-dom';
 import {
-  Error,
   ModalForm,
   Navigation,
   PostListItem,
@@ -39,7 +38,8 @@ const User: React.FC = () => {
     loadingPosts.push(<PostListItemSkeleton key={i} />);
   }
 
-  if (error) return <Error error={error} />;
+  if (error)
+    return <Redirect to={{ pathname: '/network-error', state: { error } }} />;
 
   return (
     <>

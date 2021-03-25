@@ -7,4 +7,3 @@ export { default as PostComponent } from './Post/Post';
 export { default as PostComponentSkeleton } from './Post/PostSkeleton';
 export { default as Comments } from './Comments/Comments';
 export { default as ModalForm } from './ModalForm/ModalForm';
-export { default as Error } from './Error/Error';
