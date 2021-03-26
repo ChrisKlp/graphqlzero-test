@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import { Redirect, useParams } from 'react-router-dom';
+import { Redirect, useHistory, useParams } from 'react-router-dom';
 import {
   Comments,
   ModalForm,
@@ -10,28 +10,37 @@ import {
 import { POST } from '../graphql/queries';
 import { post, postVariables } from '../graphql/__generated__/post';
 import useCreateComment from '../hooks/useCreateComment';
+import useDeletePost from '../hooks/useDeletePost';
 import useModal from '../hooks/useModal';
 
 const Post: React.FC = () => {
   const { id }: { id: string } = useParams();
+  const history = useHistory();
   const handleModal = useModal();
-  const {
-    handleCreateComment,
-    error: createCommentError,
-    loading: createCommentLoading,
-  } = useCreateComment(id);
+  const { handleDeletePost, error: deletePostError } = useDeletePost();
+
+  const { handleCreateComment, error: createCommentError } = useCreateComment(
+    id
+  );
+
+  const deletePost = () => {
+    handleDeletePost(id);
+    history.goBack();
+  };
 
   const { data, loading, error } = useQuery<post, postVariables>(POST, {
     variables: { id },
   });
 
-  if (error || createCommentError)
+  if (error || createCommentError || deletePostError)
     return (
       <Redirect
         to={{
           pathname: '/network-error',
           state: {
-            error: { ...error } || { ...createCommentError },
+            error: { ...error } || { ...createCommentError } || {
+                ...deletePostError,
+              },
           },
         }}
       />
@@ -39,8 +48,8 @@ const Post: React.FC = () => {
 
   return (
     <>
-      <Navigation name={data?.post?.user?.name} />
-      {loading || createCommentLoading ? (
+      <Navigation name={data?.post?.user?.name} deletePost={deletePost} />
+      {loading ? (
         <PostComponentSkeleton />
       ) : (
         <>

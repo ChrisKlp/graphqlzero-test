@@ -12,29 +12,28 @@ type PostListItemProps = {
 const PostListItem: React.FC<PostListItemProps> = ({ data, deletePost }) => {
   const { id, title } = data;
   return (
-    <>
-      <ListGroupItem className="d-flex align-items-center p-3">
-        <Button
-          size="sm"
-          variant="danger"
-          className="mr-3"
-          style={{ minWidth: '32px' }}
-          onClick={() => id && deletePost(id)}
-        >
-          <FontAwesomeIcon icon={faTimes} />
-        </Button>
-        <h6 className="flex-grow-1">{title}</h6>
-        <Button
-          as={Link}
-          to={`/post/${id}`}
-          size="sm"
-          variant="link"
-          className="ml-3 px-3 text-secondary"
-        >
-          <FontAwesomeIcon icon={faChevronRight} />
-        </Button>
-      </ListGroupItem>
-    </>
+    <ListGroupItem className="d-flex align-items-center p-3">
+      <Button
+        size="sm"
+        variant="danger"
+        className="mr-3"
+        style={{ minWidth: '32px' }}
+        onClick={() => id && deletePost(id)}
+      >
+        <FontAwesomeIcon icon={faTimes} />
+      </Button>
+      <h6 className="flex-grow-1">{title}</h6>
+      <Button
+        as={Link}
+        to={`/post/${id}`}
+        size="sm"
+        variant="link"
+        className="ml-3 px-3 text-secondary"
+        data-testid="postlink"
+      >
+        <FontAwesomeIcon icon={faChevronRight} />
+      </Button>
+    </ListGroupItem>
   );
 };
 

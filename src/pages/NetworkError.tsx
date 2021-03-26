@@ -7,7 +7,7 @@ type NetworkErrorProps = {
   error: ApolloError;
 };
 
-type Props = RouteComponentProps<
+export type Props = RouteComponentProps<
   Record<string, never>,
   never,
   NetworkErrorProps

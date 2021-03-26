@@ -18,7 +18,7 @@ const Home: React.FC = () => {
         </Col>
       );
     }
-    return <Row>{loadingUsers}</Row>;
+    return <Row data-testid="loading">{loadingUsers}</Row>;
   }
 
   if (error)

@@ -1,4 +1,8 @@
-import { faChevronLeft, faPlus } from '@fortawesome/free-solid-svg-icons';
+import {
+  faChevronLeft,
+  faPlus,
+  faTimes,
+} from '@fortawesome/free-solid-svg-icons';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { Button } from 'react-bootstrap';
 import { useHistory } from 'react-router-dom';
@@ -7,11 +11,16 @@ import { useHistory } from 'react-router-dom';
 type NavigationProps = {
   name?: string | null;
   showModal?: () => void;
+  deletePost?: () => void;
 };
 
-const Navigation: React.FC<NavigationProps> = ({ name, showModal }) => {
+const Navigation: React.FC<NavigationProps> = ({
+  name,
+  showModal,
+  deletePost,
+}) => {
   const history = useHistory();
-  const isUserPage = /\/user\/.*/;
+  const isUserPage = /\/user\/.*/.test(history.location.pathname);
 
   return (
     <>
@@ -30,10 +39,14 @@ const Navigation: React.FC<NavigationProps> = ({ name, showModal }) => {
             }}
           />
         )}
-        <div style={{ minWidth: '40px' }}>
-          {isUserPage.test(history.location.pathname) && (
+        <div>
+          {isUserPage ? (
             <Button variant="warning" onClick={showModal} data-testid="add">
               <FontAwesomeIcon icon={faPlus} />
+            </Button>
+          ) : (
+            <Button variant="danger" onClick={deletePost} data-testid="add">
+              <FontAwesomeIcon icon={faTimes} />
             </Button>
           )}
         </div>

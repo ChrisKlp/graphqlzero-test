@@ -17,7 +17,7 @@ const PostSkeleton: React.FC = () => {
   };
 
   return (
-    <div className="my-5">
+    <div className="my-5" data-testid="loading">
       <div style={header} className="mb-5" />
       <div style={text} />
       <div style={text} />
