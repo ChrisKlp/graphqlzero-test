@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { CREATE_COMMENT } from '../graphql/mutations';
 import { POST } from '../graphql/queries';
 import {
@@ -7,10 +7,15 @@ import {
 } from '../graphql/__generated__/createComment';
 import { post, postVariables } from '../graphql/__generated__/post';
 
-const useCreateComment = (
-  postId: string
-): ((name: string, email: string, body: string) => void) => {
-  const [createPostMutation] = useMutation<
+type UseCreateCommentReturn = {
+  handleCreateComment: (name: string, email: string, body: string) => void;
+  data: createComment | null | undefined;
+  error: ApolloError | undefined;
+  loading: boolean;
+};
+
+const useCreateComment = (postId: string): UseCreateCommentReturn => {
+  const [createPostMutation, { data, loading, error }] = useMutation<
     createComment,
     createCommentVariables
   >(CREATE_COMMENT);
@@ -60,7 +65,7 @@ const useCreateComment = (
     });
   };
 
-  return handleCreateComment;
+  return { handleCreateComment, data, error, loading };
 };
 
 export default useCreateComment;

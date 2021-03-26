@@ -1,4 +1,4 @@
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { CREATE_POST } from '../graphql/mutations';
 import { USER_POSTS } from '../graphql/queries';
 import {
@@ -10,12 +10,18 @@ import {
   userPostsVariables,
 } from '../graphql/__generated__/userPosts';
 
-const useCreatePost = (
-  userId: string
-): ((title: string, body: string) => void) => {
-  const [createPostMutation] = useMutation<createPost, createPostVariables>(
-    CREATE_POST
-  );
+type UseCreatePostReturn = {
+  handleCreatePost: (title: string, body: string) => void;
+  data: createPost | null | undefined;
+  error: ApolloError | undefined;
+  loading: boolean;
+};
+
+const useCreatePost = (userId: string): UseCreatePostReturn => {
+  const [createPostMutation, { data, error, loading }] = useMutation<
+    createPost,
+    createPostVariables
+  >(CREATE_POST);
 
   const handleCreatePost = (title: string, body: string) => {
     createPostMutation({
@@ -61,7 +67,7 @@ const useCreatePost = (
     });
   };
 
-  return handleCreatePost;
+  return { handleCreatePost, data, error, loading };
 };
 
 export default useCreatePost;

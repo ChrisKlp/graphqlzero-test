@@ -20,8 +20,16 @@ import useModal from '../hooks/useModal';
 const User: React.FC = () => {
   const { id }: { id: string } = useParams();
   const handleModal = useModal();
-  const handleDeletePost = useDeletePost();
-  const handleCreatePost = useCreatePost(id);
+  const {
+    handleDeletePost,
+    error: deletePostError,
+    loading: deletePostLoading,
+  } = useDeletePost();
+  const {
+    handleCreatePost,
+    error: createPostError,
+    loading: createPostLoading,
+  } = useCreatePost(id);
 
   const { data, loading, error } = useQuery<userPosts, userPostsVariables>(
     USER_POSTS,
@@ -38,14 +46,25 @@ const User: React.FC = () => {
     loadingPosts.push(<PostListItemSkeleton key={i} />);
   }
 
-  if (error)
-    return <Redirect to={{ pathname: '/network-error', state: { error } }} />;
+  if (error || deletePostError || createPostError)
+    return (
+      <Redirect
+        to={{
+          pathname: '/network-error',
+          state: {
+            error: { ...error } || { ...deletePostError } || {
+                ...createPostError,
+              },
+          },
+        }}
+      />
+    );
 
   return (
     <>
       <Navigation name={data?.user?.name} showModal={handleModal.showModal} />
       <ListGroup>
-        {loading
+        {loading || deletePostLoading || createPostLoading
           ? loadingPosts
           : data?.user?.posts?.data &&
             data?.user?.posts?.data.map(

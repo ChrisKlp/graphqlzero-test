@@ -15,19 +15,32 @@ import useModal from '../hooks/useModal';
 const Post: React.FC = () => {
   const { id }: { id: string } = useParams();
   const handleModal = useModal();
-  const handleCreateComment = useCreateComment(id);
+  const {
+    handleCreateComment,
+    error: createCommentError,
+    loading: createCommentLoading,
+  } = useCreateComment(id);
 
   const { data, loading, error } = useQuery<post, postVariables>(POST, {
     variables: { id },
   });
 
-  if (error)
-    return <Redirect to={{ pathname: '/network-error', state: { error } }} />;
+  if (error || createCommentError)
+    return (
+      <Redirect
+        to={{
+          pathname: '/network-error',
+          state: {
+            error: { ...error } || { ...createCommentError },
+          },
+        }}
+      />
+    );
 
   return (
     <>
       <Navigation name={data?.post?.user?.name} />
-      {loading ? (
+      {loading || createCommentLoading ? (
         <PostComponentSkeleton />
       ) : (
         <>

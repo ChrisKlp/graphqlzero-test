@@ -1,14 +1,22 @@
-import { useMutation } from '@apollo/client';
+import { ApolloError, useMutation } from '@apollo/client';
 import { DELETE_POST } from '../graphql/mutations';
 import {
   deletePost,
   deletePostVariables,
 } from '../graphql/__generated__/deletePost';
 
-const useDeletePost = (): ((id: string) => void) => {
-  const [deletePostMutation] = useMutation<deletePost, deletePostVariables>(
-    DELETE_POST
-  );
+type UseDeletePostReturn = {
+  handleDeletePost: (id: string) => void;
+  data: deletePost | null | undefined;
+  error: ApolloError | undefined;
+  loading: boolean;
+};
+
+const useDeletePost = (): UseDeletePostReturn => {
+  const [deletePostMutation, { data, error, loading }] = useMutation<
+    deletePost,
+    deletePostVariables
+  >(DELETE_POST);
 
   const handleDeletePost = (id: string) => {
     deletePostMutation({
@@ -27,7 +35,7 @@ const useDeletePost = (): ((id: string) => void) => {
       },
     });
   };
-  return handleDeletePost;
+  return { handleDeletePost, data, error, loading };
 };
 
 export default useDeletePost;
