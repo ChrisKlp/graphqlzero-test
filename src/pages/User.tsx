@@ -1,27 +1,28 @@
+import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { ListGroup } from 'react-bootstrap';
-import { Redirect, useParams } from 'react-router-dom';
+import { useParams, useHistory } from 'react-router-dom';
 import {
   ModalForm,
   Navigation,
   PostListItem,
   PostListItemSkeleton,
-} from '../components';
-import { USER_POSTS } from '../graphql/queries';
+} from 'components';
+import { USER_POSTS } from 'graphql/queries';
 
-import {
-  userPosts,
-  userPostsVariables,
-} from '../graphql/__generated__/userPosts';
-import useCreatePost from '../hooks/useCreatePost';
-import useDeletePost from '../hooks/useDeletePost';
-import useModal from '../hooks/useModal';
+import { userPosts, userPostsVariables } from 'graphql/__generated__/userPosts';
+import useCreatePost from 'hooks/useCreatePost';
+import useDeletePost from 'hooks/useDeletePost';
+import useModal from 'hooks/useModal';
+import generateArray from 'utils/generateArray';
+import routes from 'routes';
 
 const User: React.FC = () => {
   const { id }: { id: string } = useParams();
   const handleModal = useModal();
   const { handleDeletePost, error: deletePostError } = useDeletePost();
   const { handleCreatePost, error: createPostError } = useCreatePost(id);
+  const history = useHistory();
 
   const { data, loading, error } = useQuery<userPosts, userPostsVariables>(
     USER_POSTS,
@@ -32,25 +33,22 @@ const User: React.FC = () => {
     }
   );
 
-  const loadingPosts = [];
+  useEffect(() => {
+    if (error || deletePostError || createPostError) {
+      history.push({
+        pathname: routes.error,
+        state: {
+          error: { ...error } || { ...deletePostError } || {
+              ...createPostError,
+            },
+        },
+      });
+    }
+  }, [error, deletePostError, createPostError, history]);
 
-  for (let i = 0; i < 12; i += 1) {
-    loadingPosts.push(<PostListItemSkeleton key={i} />);
-  }
-
-  if (error || deletePostError || createPostError)
-    return (
-      <Redirect
-        to={{
-          pathname: '/network-error',
-          state: {
-            error: { ...error } || { ...deletePostError } || {
-                ...createPostError,
-              },
-          },
-        }}
-      />
-    );
+  const loadingPosts = generateArray(12).map((_, index) => (
+    <PostListItemSkeleton key={index} />
+  ));
 
   return (
     <>
@@ -66,7 +64,7 @@ const User: React.FC = () => {
                 <PostListItem
                   key={post.id}
                   data={post}
-                  deletePost={handleDeletePost}
+                  handleDeletePost={handleDeletePost}
                 />
               )
           )

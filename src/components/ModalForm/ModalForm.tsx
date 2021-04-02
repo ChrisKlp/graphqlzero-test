@@ -2,29 +2,10 @@ import { Button, Form, Modal } from 'react-bootstrap';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
-import { UseModalType } from '../../hooks/useModal';
+import { UseModalType } from 'hooks/useModal';
 
-type ModalFormProps = {
-  handleModal: UseModalType;
-  comments?: boolean;
-  createPost?: (title: string, body: string) => void;
-  createComment?: (name: string, email: string, body: string) => void;
-};
-
-type Inputs = {
-  name: string;
-  email: string;
-  title: string;
-  body: string;
-};
-
-const ModalForm: React.FC<ModalFormProps> = ({
-  handleModal,
-  comments,
-  createPost,
-  createComment,
-}) => {
-  const validationSchema = Yup.object().shape(
+const validationSchema = (comments?: boolean) =>
+  Yup.object().shape(
     comments
       ? {
           name: Yup.string()
@@ -49,8 +30,28 @@ const ModalForm: React.FC<ModalFormProps> = ({
         }
   );
 
+type ModalFormProps = {
+  handleModal: UseModalType;
+  comments?: boolean;
+  createPost?: (title: string, body: string) => void;
+  createComment?: (name: string, email: string, body: string) => void;
+};
+
+type Inputs = {
+  name: string;
+  email: string;
+  title: string;
+  body: string;
+};
+
+const ModalForm: React.FC<ModalFormProps> = ({
+  handleModal,
+  comments,
+  createPost,
+  createComment,
+}) => {
   const { register, handleSubmit, errors, reset } = useForm({
-    resolver: yupResolver(validationSchema),
+    resolver: yupResolver(validationSchema(comments)),
   });
 
   const onCancel = () => {
@@ -67,7 +68,6 @@ const ModalForm: React.FC<ModalFormProps> = ({
       createComment(data.name, data.email, data.body);
     }
 
-    handleModal.closeModal();
     onCancel();
   };
 

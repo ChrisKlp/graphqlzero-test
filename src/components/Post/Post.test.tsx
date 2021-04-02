@@ -1,5 +1,5 @@
 import { render } from '@testing-library/react';
-import { post_post } from '../../graphql/__generated__/post';
+import { post_post } from 'graphql/__generated__/post';
 import Post from './Post';
 
 describe('Post component', () => {

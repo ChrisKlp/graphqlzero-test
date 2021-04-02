@@ -1,7 +1,7 @@
 import { createLocation, createMemoryHistory } from 'history';
 import { ApolloError } from '@apollo/client';
 import { render } from '@testing-library/react';
-import NetworkError, { Props } from '../NetworkError';
+import NetworkError, { Props } from 'pages/NetworkError';
 
 describe('NetworkError component', () => {
   const errorState = {

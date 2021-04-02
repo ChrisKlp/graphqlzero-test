@@ -1,0 +1,45 @@
+body {
+  --skeletonColor: #ececec;
+}
+
+.skeleton__nav-name {
+  background-color: var(--skeletonColor);
+  width: 200px;
+  height: 20px;
+}
+
+.skeleton__post-wrapper {
+  border: 1px solid var(--skeletonColor);
+  padding: 22px;
+}
+
+.skeleton__post-text {
+  background-color: var(--skeletonColor);
+  height: 15px;
+  width: 75%;
+}
+
+.skeleton__post-button {
+  background-color: var(--skeletonColor);
+  width: 5%;
+  height: 15px;
+}
+
+.skeleton__user-wrapper {
+  border: 1px solid var(--skeletonColor);
+}
+
+.skeleton__user-text {
+  background-color: var(--skeletonColor);
+  height: 15px;
+}
+
+.skeleton__user-header {
+  background-color: var(--skeletonColor);
+  height: 53px;
+}
+
+.skeleton__user-button {
+  background-color: var(--skeletonColor);
+  height: 38px;
+}

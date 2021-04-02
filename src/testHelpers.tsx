@@ -2,6 +2,7 @@ import React from 'react';
 import { createMemoryHistory, MemoryHistory } from 'history';
 import { render, RenderResult } from '@testing-library/react';
 import { Router } from 'react-router-dom';
+import { MockedProvider, MockedResponse } from '@apollo/client/testing';
 
 type RenderWithRouter = (
   renderComponent: React.ReactNode,
@@ -32,3 +33,17 @@ global.renderWithRouter = (children, route) => {
     history,
   };
 };
+
+type MockedWrapperProps = {
+  children?: React.ReactNode;
+  mocks?: MockedResponse<Record<string, unknown>>[];
+};
+
+export const MockedWrapper: React.FC<MockedWrapperProps> = ({
+  children,
+  mocks,
+}) => (
+  <MockedProvider mocks={mocks} addTypename={false}>
+    {children}
+  </MockedProvider>
+);

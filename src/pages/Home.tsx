@@ -1,28 +1,35 @@
+import { useEffect } from 'react';
 import { useQuery } from '@apollo/client';
 import { Col, Row } from 'react-bootstrap';
-import { Redirect } from 'react-router-dom';
-import { UserCard, UserCardSkeleton } from '../components';
-import { USERS } from '../graphql/queries';
-import { users } from '../graphql/__generated__/users';
+import { useHistory } from 'react-router-dom';
+import { UserCard, UserCardSkeleton } from 'components';
+import { USERS } from 'graphql/queries';
+import { users } from 'graphql/__generated__/users';
+import generateArray from 'utils/generateArray';
+import routes from 'routes';
 
 const Home: React.FC = () => {
   const { data, loading, error } = useQuery<users>(USERS);
+  const history = useHistory();
+
+  useEffect(() => {
+    if (error) {
+      history.push({
+        pathname: routes.error,
+        state: { error },
+      });
+    }
+  }, [error, history]);
 
   if (loading) {
-    const loadingUsers = [];
+    const loadingUsers = generateArray(12).map((_, index) => (
+      <Col sm={6} md={4} lg={3} className="mb-4" key={index}>
+        <UserCardSkeleton />
+      </Col>
+    ));
 
-    for (let i = 0; i < 12; i += 1) {
-      loadingUsers.push(
-        <Col sm={6} md={4} lg={3} className="mb-4" key={i}>
-          <UserCardSkeleton />
-        </Col>
-      );
-    }
     return <Row data-testid="loading">{loadingUsers}</Row>;
   }
-
-  if (error)
-    return <Redirect to={{ pathname: '/network-error', state: { error } }} />;
 
   return (
     <Row>

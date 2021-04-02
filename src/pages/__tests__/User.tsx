@@ -1,8 +1,8 @@
 import { MockedProvider } from '@apollo/client/testing';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { USER_POSTS } from '../../graphql/queries';
-import User from '../User';
+import { USER_POSTS } from 'graphql/queries';
+import User from 'pages/User';
 
 describe('User comppnent', () => {
   const userPostsQueryResult = {

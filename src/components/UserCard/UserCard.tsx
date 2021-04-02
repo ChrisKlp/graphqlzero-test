@@ -1,6 +1,7 @@
 import { Button, Card } from 'react-bootstrap';
-import { Link } from 'react-router-dom';
-import { users_users_data } from '../../graphql/__generated__/users';
+import { generatePath, Link } from 'react-router-dom';
+import { users_users_data } from 'graphql/__generated__/users';
+import routes from 'routes';
 
 type UserCardProps = {
   data: users_users_data;
@@ -27,14 +28,16 @@ const UserCard: React.FC<UserCardProps> = ({ data }) => {
           <span>{company?.catchPhrase}</span>
           <strong>{company?.bs}</strong>
         </Card.Text>
-        <Button
-          className="w-100 text-uppercase"
-          variant="warning"
-          as={Link}
-          to={`/user/${id}`}
-        >
-          Details
-        </Button>
+        {id && (
+          <Button
+            className="w-100 text-uppercase"
+            variant="warning"
+            as={Link}
+            to={generatePath(routes.user, { id })}
+          >
+            Details
+          </Button>
+        )}
       </Card.Body>
     </Card>
   );

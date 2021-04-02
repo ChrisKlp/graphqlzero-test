@@ -1,4 +1,4 @@
-import { post_post } from '../../graphql/__generated__/post';
+import { post_post } from 'graphql/__generated__/post';
 
 type PostProps = {
   data: post_post;

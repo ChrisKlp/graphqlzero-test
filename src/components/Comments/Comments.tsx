@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Button, Card } from 'react-bootstrap';
-import { post_post_comments_data } from '../../graphql/__generated__/post';
+import { post_post_comments_data } from 'graphql/__generated__/post';
 
 type CommentsProps = {
   data: (post_post_comments_data | null)[];

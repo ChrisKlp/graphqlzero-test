@@ -1,7 +1,8 @@
-import { MockedProvider } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
 import { renderHook, act } from '@testing-library/react-hooks';
 import useCreateComment from '../useCreateComment';
 import { CREATE_COMMENT } from '../../graphql/mutations';
+import { MockedWrapper } from '../../testHelpers';
 
 describe('useCreateComment hook', () => {
   const createCommentResult = {
@@ -27,17 +28,14 @@ describe('useCreateComment hook', () => {
     },
   ];
 
-  const getHookWrapper = (mocks: typeof createCommentMock) => {
-    const wrapper: React.FC = ({ children }) => (
-      <MockedProvider mocks={mocks} addTypename={false}>
-        {children}
-      </MockedProvider>
-    );
-
+  const getHookWrapper = (mocks: MockedResponse<Record<string, unknown>>[]) => {
     const { result, waitForNextUpdate } = renderHook(
       () => useCreateComment('5'),
       {
-        wrapper,
+        wrapper: MockedWrapper,
+        initialProps: {
+          mocks,
+        },
       }
     );
 

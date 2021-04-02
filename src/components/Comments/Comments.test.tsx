@@ -1,6 +1,6 @@
 import { fireEvent, render } from '@testing-library/react';
 import { act } from 'react-dom/test-utils';
-import { post_post_comments_data } from '../../graphql/__generated__/post';
+import { post_post_comments_data } from 'graphql/__generated__/post';
 import Comments from './Comments';
 
 describe('Comments component', () => {

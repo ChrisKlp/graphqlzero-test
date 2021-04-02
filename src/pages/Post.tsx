@@ -1,17 +1,19 @@
+import { useCallback, useEffect } from 'react';
 import { useQuery } from '@apollo/client';
-import { Redirect, useHistory, useParams } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import {
   Comments,
   ModalForm,
   Navigation,
   PostComponent,
   PostComponentSkeleton,
-} from '../components';
-import { POST } from '../graphql/queries';
-import { post, postVariables } from '../graphql/__generated__/post';
-import useCreateComment from '../hooks/useCreateComment';
-import useDeletePost from '../hooks/useDeletePost';
-import useModal from '../hooks/useModal';
+} from 'components';
+import { POST } from 'graphql/queries';
+import { post, postVariables } from 'graphql/__generated__/post';
+import useCreateComment from 'hooks/useCreateComment';
+import useDeletePost from 'hooks/useDeletePost';
+import useModal from 'hooks/useModal';
+import routes from 'routes';
 
 const Post: React.FC = () => {
   const { id }: { id: string } = useParams();
@@ -23,28 +25,27 @@ const Post: React.FC = () => {
     id
   );
 
-  const deletePost = () => {
+  const deletePost = useCallback(() => {
     handleDeletePost(id);
     history.goBack();
-  };
+  }, [handleDeletePost, history, id]);
 
   const { data, loading, error } = useQuery<post, postVariables>(POST, {
     variables: { id },
   });
 
-  if (error || createCommentError || deletePostError)
-    return (
-      <Redirect
-        to={{
-          pathname: '/network-error',
-          state: {
-            error: { ...error } || { ...createCommentError } || {
-                ...deletePostError,
-              },
-          },
-        }}
-      />
-    );
+  useEffect(() => {
+    if (error || createCommentError || deletePostError) {
+      history.push({
+        pathname: routes.error,
+        state: {
+          error: { ...error } || { ...createCommentError } || {
+              ...deletePostError,
+            },
+        },
+      });
+    }
+  }, [error, createCommentError, deletePostError, history]);
 
   return (
     <>

@@ -28,17 +28,7 @@ const Navigation: React.FC<NavigationProps> = ({
         <Button variant="link" onClick={() => history.goBack()}>
           <FontAwesomeIcon icon={faChevronLeft} /> Back
         </Button>
-        {name ? (
-          <h4>{name}</h4>
-        ) : (
-          <div
-            style={{
-              backgroundColor: '#ececec',
-              width: '200px',
-              height: '20px',
-            }}
-          />
-        )}
+        {name ? <h4>{name}</h4> : <div className="skeleton__nav-name" />}
         <div>
           {isUserPage ? (
             <Button variant="warning" onClick={showModal} data-testid="add">

@@ -1,4 +1,4 @@
-import { users_users_data } from '../../graphql/__generated__/users';
+import { users_users_data } from 'graphql/__generated__/users';
 import UserCard from './UserCard';
 
 describe('UserCard component', () => {

@@ -1,8 +1,8 @@
 import { MockedProvider } from '@apollo/client/testing';
 import { waitFor } from '@testing-library/react';
 import userEvent from '@testing-library/user-event';
-import { USERS } from '../../graphql/queries';
-import Home from '../Home';
+import { USERS } from 'graphql/queries';
+import Home from 'pages/Home';
 
 describe('Home Component', () => {
   const usersQueryResult = {
